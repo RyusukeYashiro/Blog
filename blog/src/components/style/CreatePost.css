@@ -47,7 +47,7 @@
     border: none;
     box-shadow: 2px 8px 21px -2px #777;
     /* transition: 0.3ms; */
-    /* cursor: pointer; */
+    cursor: pointer;
     margin: 10px auto;
 }
 
