@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./style/CreatePost.css";
 import {addDoc, collection} from "firebase/firestore"
 import {db} from '../fireBase';
 import {auth} from '../fireBase';
 import { useNavigate } from 'react-router-dom';
 
-const CreatePost = () => {
+const CreatePost = ( isAuth ) => {
   const [title , setTitle] = useState([]);
   const [postText , setPostText] = useState([]);
   const navigate = useNavigate(); 
@@ -30,11 +30,17 @@ const CreatePost = () => {
       }
     });
     navigate('/');
-  }
+    }
   //失敗した時console.logで表示
-  catch(error) {
-    console.error("Error adding document" , error);
+    catch(error) {
+      console.error("Error adding document" , error);
     }};
+
+    useEffect(() => {
+      if(!isAuth){
+        navigate("/login");
+      }
+    } , []);
   return (
     <div className='createPostPage'>
       <div className='container'>
