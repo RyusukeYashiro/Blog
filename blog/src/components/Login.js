@@ -15,11 +15,11 @@ const Login = ({ setIsAuth }) => {
   };
 
   return (
-   <div class="login-page">
+  <div class="login-page">
     <h1 class="">Login</h1>
     <div>!ログインではgoogleを使います!</div>
     <button onClick={loginwithGoogle}>Login</button>
-   </div>
+  </div>
   );
 }
 
