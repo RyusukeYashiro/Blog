@@ -1,11 +1,10 @@
 import React, { useEffect , useState } from 'react'
 import './style/Home.css';
-import { db } from '../fireBase';
-import { collection , Firestore, getDocs } from 'firebase/firestore';
+import { auth, db } from '../fireBase';
+import { collection , deleteDoc, doc, getDocs } from 'firebase/firestore';
 
 const Home = () => {
   const [postlist , setPostlist] = useState([]);
-
   //データを取ってくるのはリロードされた時に一度だけであるので、
   // 今回はuseeffectを用いて行う
   useEffect(() => {
@@ -18,6 +17,17 @@ const Home = () => {
     };
     getPosts();
   } , []);
+  //postの削除を行う関数
+  const deletePost = async( postId ) => {
+    try {
+      await deleteDoc(doc(db , "posts" , postId));
+      //postの状態を管理しているpostlistから今回削除するようなpostIdを見つけて削除する
+      //useStateの値が常に最新かどうか限らないのでここでは、関数を呼び出してLatestListとして複製して、filterをかけている。
+      setPostlist((LatestList) => LatestList.filter(post => post.id !== postId));
+    } catch(error) {
+      console.error("Error deleting post: ", error);
+    }
+  };
 
   return (
     <div className='homePage'>
@@ -34,13 +44,17 @@ const Home = () => {
             <h3>
               @{post.author.username}
             </h3>
-            <button>削除</button>
+            {/* HTMLとJavaScriptを組み合わせる際には、アロー関数を使ってより複雑な処理や引数の渡し方を行う
+            htmlに特定のプロパティを渡して、関数の処理はできない。それができるのはコンポーネントだけ。 */}
+            {post.author.id === auth.currentUser?.uid && (
+              <button onClick={() => deletePost(post.id)}>削除</button>
+            )}
           </div>
         </div>
         );
       })}
     </div>
   );
-}
+};
 
 export default Home
