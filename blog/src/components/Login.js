@@ -8,8 +8,11 @@ const Login = ({ setIsAuth }) => {
   const navigate = useNavigate();
   const loginwithGoogle = () => {
     signInWithPopup(auth , provider).then((result) => {
+      //localStorageに情報を保存している。
+      // ログインしているかどうかをboolで判定
       localStorage.setItem("isAuth" , true);
       setIsAuth(true);
+      // ホーム画面へとリダイレクト
       navigate("/");
     });
   };
